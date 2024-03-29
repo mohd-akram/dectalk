@@ -140,7 +140,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		synthDriverHandler.SynthDriver.InflectionSetting(),
 	)
 	if usingWasapiWavePlayer(): supportedSettings+=(synthDriverHandler.SynthDriver.VolumeSetting(),)
-	supportedSettings+=(NumericDriverSetting("spf", _("&SPF"), True),
+	supportedSettings+=(NumericDriverSetting("spf", _("&SPF"), True, defaultVal=50),
 		BooleanDriverSetting("pauses", _("&Shorten pauses"), True, defaultVal=True),
 	)
 	supportedCommands = {
