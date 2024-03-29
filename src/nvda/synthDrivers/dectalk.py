@@ -27,7 +27,11 @@ import threading
 # NVDA Modules:
 import config
 from logHandler import log
-from nvwave import WavePlayer, usingWasapiWavePlayer
+from nvwave import WavePlayer
+try: from nvwave import usingWasapiWavePlayer
+except:
+	def usingWasapiWavePlayer():
+		return False
 import speech
 from speech.commands import IndexCommand, CharacterModeCommand, PitchCommand, SpeechCommand
 import synthDriverHandler
