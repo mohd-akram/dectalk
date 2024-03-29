@@ -32,6 +32,7 @@ import speech
 from speech.commands import IndexCommand, CharacterModeCommand, PitchCommand, SpeechCommand
 import synthDriverHandler
 from winUser import WNDCLASSEXW, WNDPROC
+from autoSettingsUtils.driverSetting import NumericDriverSetting
 
 
 DECTALK_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "dectalk.dll"))
@@ -137,6 +138,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		synthDriverHandler.SynthDriver.RateSetting(),
 		synthDriverHandler.SynthDriver.PitchSetting(),
 		synthDriverHandler.SynthDriver.InflectionSetting(),
+		NumericDriverSetting("spf", _("&SPF"), True),
 	)
 	supportedCommands = {
 		IndexCommand,
@@ -163,6 +165,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 	maxPitch = 350
 	minRate = 75
 	maxRate = 650
+	minSPF = 50
+	maxSPF = 200
 	wmIndex = 0
 	wmBuffer = 0
 	appInstance = windll.kernel32.GetModuleHandleW(None)
@@ -185,6 +189,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self.dt_inflection = self._voices[self._voice]["inflection"]
 		self.dt_pitch = self._voices[self._voice]["pitch"]
 		self.dt_rate = 180
+		self.dt_spf = 100
 		self.audioData = BytesIO()
 		self.setup_wndproc()
 		self._messageWindowClassAtom = windll.user32.RegisterClassExW(byref(self.nvdaDtSoftWndCls))
@@ -351,6 +356,14 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		val = self._percentToParam(rate, self.minRate, self.maxRate)
 		self.dt_rate = val
 		dectalk.TextToSpeechSpeak(self.handle, b"[:rate %d]" % val, 1)
+
+	def _get_spf(self):
+		return self._paramToPercent(self.dt_spf, self.minSPF, self.maxSPF)
+
+	def _set_spf(self, spf):
+		val = self._percentToParam(spf, self.minSPF, self.maxSPF)
+		self.dt_spf = val
+		dectalk.TextToSpeechSpeak(self.handle, b"[:SPF %d]" % val, 1)
 
 	def _get_voice(self):
 		return self._voice
