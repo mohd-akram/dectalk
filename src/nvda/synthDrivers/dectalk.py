@@ -27,7 +27,7 @@ import threading
 # NVDA Modules:
 import config
 from logHandler import log
-from nvwave import WavePlayer
+from nvwave import WavePlayer, usingWasapiWavePlayer
 import speech
 from speech.commands import IndexCommand, CharacterModeCommand, PitchCommand, SpeechCommand
 import synthDriverHandler
@@ -138,7 +138,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		synthDriverHandler.SynthDriver.RateSetting(),
 		synthDriverHandler.SynthDriver.PitchSetting(),
 		synthDriverHandler.SynthDriver.InflectionSetting(),
-		NumericDriverSetting("spf", _("&SPF"), True),
+	)
+	if usingWasapiWavePlayer(): supportedSettings+=(synthDriverHandler.SynthDriver.VolumeSetting(),)
+	supportedSettings+=(NumericDriverSetting("spf", _("&SPF"), True),
 		BooleanDriverSetting("pauses", _("&Shorten pauses"), True, defaultVal=True),
 	)
 	supportedCommands = {
@@ -192,6 +194,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self.dt_pitch = self._voices[self._voice]["pitch"]
 		self.dt_rate = 180
 		self.dt_spf = 100
+		self.dt_volume = 1
 		self.audioData = BytesIO()
 		self.setup_wndproc()
 		self._messageWindowClassAtom = windll.user32.RegisterClassExW(byref(self.nvdaDtSoftWndCls))
@@ -360,6 +363,14 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		val = self._percentToParam(rate, self.minRate, self.maxRate)
 		self.dt_rate = val
 		dectalk.TextToSpeechSpeak(self.handle, b"[:rate %d]" % val, 1)
+
+	def _get_volume(self):
+		return int(self.dt_volume*100)
+
+	def _set_volume(self, volume):
+		val = volume/100
+		self.dt_volume = val
+		self.player.setVolume(all=val)
 
 	def _get_pauses(self):
 		return self._pauses
