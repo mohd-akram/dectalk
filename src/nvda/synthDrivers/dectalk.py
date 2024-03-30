@@ -28,10 +28,15 @@ import threading
 import config
 from logHandler import log
 from nvwave import WavePlayer
+try: from nvwave import usingWasapiWavePlayer
+except:
+	def usingWasapiWavePlayer():
+		return False
 import speech
 from speech.commands import IndexCommand, CharacterModeCommand, PitchCommand, SpeechCommand
 import synthDriverHandler
 from winUser import WNDCLASSEXW, WNDPROC
+from autoSettingsUtils.driverSetting import NumericDriverSetting, BooleanDriverSetting
 
 
 DECTALK_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "dectalk.dll"))
@@ -138,6 +143,10 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		synthDriverHandler.SynthDriver.PitchSetting(),
 		synthDriverHandler.SynthDriver.InflectionSetting(),
 	)
+	if usingWasapiWavePlayer(): supportedSettings+=(synthDriverHandler.SynthDriver.VolumeSetting(),)
+	supportedSettings+=(NumericDriverSetting("spf", _("&SPF"), True, defaultVal=50),
+		BooleanDriverSetting("pauses", _("&Shorten pauses"), True, defaultVal=True),
+	)
 	supportedCommands = {
 		IndexCommand,
 		CharacterModeCommand,
@@ -163,6 +172,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 	maxPitch = 350
 	minRate = 75
 	maxRate = 650
+	minSPF = 50
+	maxSPF = 200
+	_pauses=True
 	wmIndex = 0
 	wmBuffer = 0
 	appInstance = windll.kernel32.GetModuleHandleW(None)
@@ -185,6 +197,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self.dt_inflection = self._voices[self._voice]["inflection"]
 		self.dt_pitch = self._voices[self._voice]["pitch"]
 		self.dt_rate = 180
+		self.dt_spf = 100
+		self.dt_volume = 1
 		self.audioData = BytesIO()
 		self.setup_wndproc()
 		self._messageWindowClassAtom = windll.user32.RegisterClassExW(byref(self.nvdaDtSoftWndCls))
@@ -278,7 +292,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			":punctuation some",  # NVDA will handle punctuation.
 			f":dv ap {self.dt_pitch}",
 			f":dv pr {self.dt_inflection}]",
+			"[:period 0] [:comma 0]"
 		]
+		if self._pauses: textList.append("[:period -380] [:comma -40]")
 		for item in speechSequence:
 			if isinstance(item, str):
 				# Prevent control strings from going into our text from input.
@@ -351,6 +367,29 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		val = self._percentToParam(rate, self.minRate, self.maxRate)
 		self.dt_rate = val
 		dectalk.TextToSpeechSpeak(self.handle, b"[:rate %d]" % val, 1)
+
+	def _get_volume(self):
+		return int(self.dt_volume*100)
+
+	def _set_volume(self, volume):
+		val = volume/100
+		self.dt_volume = val
+		self.player.setVolume(all=val)
+
+	def _get_pauses(self):
+		return self._pauses
+
+	def _set_pauses(self, pauses):
+		if self._pauses==pauses: return
+		self._pauses = pauses
+
+	def _get_spf(self):
+		return self._paramToPercent(self.dt_spf, self.minSPF, self.maxSPF)
+
+	def _set_spf(self, spf):
+		val = self._percentToParam(spf, self.minSPF, self.maxSPF)
+		self.dt_spf = val
+		dectalk.TextToSpeechSpeak(self.handle, b"[:SPF %d]" % val, 1)
 
 	def _get_voice(self):
 		return self._voice
