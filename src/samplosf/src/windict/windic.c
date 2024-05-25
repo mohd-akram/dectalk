@@ -1121,7 +1121,12 @@ void HelpHelpCallback(GtkWidget *w, gpointer data)
   help_vbox = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER(help_window), help_vbox);
 
-  help_label = gtk_label_new("\nWindic help\n\n  Point your web browser to:\n\n   file:///usr/local/doc/DECtalk/html/DECtalk.html\n\n  Or if you use Netscape, click below.\n");
+  help_label = gtk_label_new(
+    "\n"
+    "Windic help\n\n"
+    "  Point your web browser to:\n\n"
+    "  - file://" DECTALK_INSTALL_PREFIX "/doc/DECtalk/html/dectalk.htm\n\n"
+    "  Or if you have xdg-open installed, click below.\n");
   gtk_box_pack_start(GTK_BOX(help_vbox), help_label, FALSE, FALSE, 0);
   gtk_label_set_justify(GTK_LABEL(help_label), GTK_JUSTIFY_LEFT);
 
@@ -1155,7 +1160,7 @@ void HelpHelpCallback(GtkWidget *w, gpointer data)
 ********************************************************************************/
 void HelpOpenNetscape()
 {
-  system("netscape file:///usr/local/doc/DECtalk/html/DECtalk.html &");
+  system("xdg-open file://" DECTALK_INSTALL_PREFIX "/doc/DECtalk/html/dectalk.htm &");
 }
 
 /*******************************************************************************
