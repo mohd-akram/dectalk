@@ -462,7 +462,7 @@ unsigned int load_dectalk(char *lang)
 	funcs->TextToSpeechOpenWaveOutFile = (MMRESULT ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechOpenWaveOutFile");
 	funcs->TextToSpeechCloseWaveOutFile = (MMRESULT ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechCloseWaveOutFile");
 	funcs->TextToSpeechGetStatus = (MMRESULT ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechGetStatus");
-	funcs->TextToSpeechReset = (MMRESULT ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechReset");
+	funcs->TextToSpeechReset = (MMRESULT ((_cdecl*)(LPTTS_HANDLE_T, BOOL))) GetProcAddress(funcs->mod,"TextToSpeechReset");
 	funcs->TextToSpeechSync = (MMRESULT ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechSync");
 	funcs->TextToSpeechGetRate = (MMRESULT ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechGetRate");
 	funcs->TextToSpeechSetRate = (MMRESULT ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechSetRate");
@@ -487,10 +487,10 @@ unsigned int load_dectalk(char *lang)
 
 	funcs->TextToSpeechVersion = (ULONG ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechVersion");
 	// CAB	Removed warnings 6/24/02
-	funcs->TextToSpeechTyping = (VOID ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechTyping");
+	funcs->TextToSpeechTyping = (VOID ((_cdecl*)(LPTTS_HANDLE_T, unsigned char))) GetProcAddress(funcs->mod,"TextToSpeechTyping");
 
 	funcs->TextToSpeechGetLastError = (ULONG ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechGetLastError");
-	funcs->TextToSpeechReserved1 = (ULONG ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechReserved1");
+	funcs->TextToSpeechReserved1 = (ULONG ((_cdecl*)(unsigned char*, U8, BOOL, BOOL))) GetProcAddress(funcs->mod,"TextToSpeechReserved1");
 	// CAB	Removed warnings 6/24/02
 	funcs->TextToSpeechReserved2 = (ULONG ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechReserved2");
 
@@ -504,9 +504,9 @@ unsigned int load_dectalk(char *lang)
 	funcs->TextToSpeechSetSpeakerParams = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechSetSpeakerParams");
 	
 	// CAB	Removed warnings 6/24/02
-	funcs->TextToSpeechDictionaryHit = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechDictionaryHit");
+	funcs->TextToSpeechDictionaryHit = (int ((_cdecl*)(LPTTS_HANDLE_T, struct dic_entry *))) GetProcAddress(funcs->mod,"TextToSpeechDictionaryHit");
 	funcs->TextToSpeechDumpDictionary = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechDumpDictionary");
-	funcs->TextToSpeechUserDictionaryHit = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechUserDictionaryHit");
+	funcs->TextToSpeechUserDictionaryHit = (int ((_cdecl*)(LPTTS_HANDLE_T, struct dic_entry *))) GetProcAddress(funcs->mod,"TextToSpeechUserDictionaryHit");
 	funcs->TextToSpeechDumpUserDictionary = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechDumpUserDictionary");
 	funcs->TextToSpeechAddUserEntry = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechAddUserEntry");
 	funcs->TextToSpeechDeleteUserEntry = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechDeleteUserEntry");
@@ -515,7 +515,7 @@ unsigned int load_dectalk(char *lang)
 	funcs->TextToSpeechConvertToPhonemes = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechConvertToPhonemes");
 	/* MGS added TextToSpeechTuning 12/03/1998 */
 	funcs->TextToSpeechTuning = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechTuning");
-	funcs->TextToSpeechGetPhVdefParams = (DWORD ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechGetPhVdefParams");
+	funcs->TextToSpeechGetPhVdefParams = (short *((_cdecl*)(LPTTS_HANDLE_T, UINT))) GetProcAddress(funcs->mod,"TextToSpeechGetPhVdefParams");
 
 	funcs->TextToSpeechSetVolume = (MMRESULT ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechSetVolume");
 	funcs->TextToSpeechGetVolume = (MMRESULT ((_cdecl*)())) GetProcAddress(funcs->mod,"TextToSpeechGetVolume");
