@@ -1211,7 +1211,19 @@ void HelpAboutCallback(GtkWidget *w, gpointer data)
   if (config_file==NULL)
   {
 	  char p[PATH_MAX] = {};
-	  ssize_t count = readlink("/proc/self/exe", p, PATH_MAX);
+#if defined(__linux__)
+		ssize_t count = readlink("/proc/self/exe", p, PATH_MAX);
+#elif defined(__APPLE__)
+		char ep[PATH_MAX] = {};
+		uint32_t size = sizeof(ep);
+		ssize_t count = -1;
+		if (_NSGetExecutablePath(ep, &size) == 0) {
+			if (realpath(ep, p) != NULL) {
+				count = strlen(p);
+			}
+		}
+#endif
+
 	  if (count != -1) {
 		  char *cfg;
 		  cfg = dirname(p);
@@ -1228,7 +1240,18 @@ void HelpAboutCallback(GtkWidget *w, gpointer data)
   if (config_file==NULL)
   {
 	  char p[PATH_MAX] = {};
-	  ssize_t count = readlink("/proc/self/exe", p, PATH_MAX);
+#if defined(__linux__)
+		ssize_t count = readlink("/proc/self/exe", p, PATH_MAX);
+#elif defined(__APPLE__)
+		char ep[PATH_MAX] = {};
+		uint32_t size = sizeof(ep);
+		ssize_t count = -1;
+		if (_NSGetExecutablePath(ep, &size) == 0) {
+			if (realpath(ep, p) != NULL) {
+				count = strlen(p);
+			}
+		}
+#endif
 	  if (count != -1) {
 		  char *cfg;
 		  cfg = dirname(p);
@@ -1270,7 +1293,18 @@ void HelpAboutCallback(GtkWidget *w, gpointer data)
 #if defined __linux || defined (__APPLE__)
 	if (exe_path && (bitmap_path[0] != '/')) {
 	   char p[PATH_MAX] = {};
-	   ssize_t count = readlink("/proc/self/exe", p, PATH_MAX);
+#if defined(__linux__)
+		 ssize_t count = readlink("/proc/self/exe", p, PATH_MAX);
+#elif defined(__APPLE__)
+		 char ep[PATH_MAX] = {};
+		 uint32_t size = sizeof(ep);
+		 ssize_t count = -1;
+		 if (_NSGetExecutablePath(ep, &size) == 0) {
+			 if (realpath(ep, p) != NULL) {
+				 count = strlen(p);
+			 }
+		 }
+#endif
 	   if (count != -1) {
 	     char *bmp;
 	     bmp = dirname(p);
