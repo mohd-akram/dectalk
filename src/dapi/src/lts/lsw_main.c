@@ -1582,7 +1582,7 @@ int linux_get_dict_names(char *main_dict_name,char *user_dict_name, char *foreig
 		if (count != -1) {
 			char *cfg;
 			cfg = dirname(p);
-			strcat(cfg,"/../");
+			strcat(cfg,"/../etc/");
 			strcat(cfg,"DECtalk.conf");
 			config_file=fopen(cfg,"r");
 		}
@@ -1637,7 +1637,7 @@ int linux_get_dict_names(char *main_dict_name,char *user_dict_name, char *foreig
 						dict = dirname(p);
 						strcat(dict,"/");
 						if (parent)
-							strcat(dict,"../");
+							strcat(dict,"../share/dectalk/");
 						strcat(dict,main_dict_name);
 						strcpy(main_dict_name,dict);
 					}
@@ -1673,7 +1673,7 @@ int linux_get_dict_names(char *main_dict_name,char *user_dict_name, char *foreig
 				dict = dirname(p);
 				strcat(dict,"/");
 				if (parent)
-					strcat(dict,"../");
+					strcat(dict,"../share/dectalk/");
 				strcat(dict,DEF_LINUX_MAIN_DICT);
 				strcpy(main_dict_name,dict);
 			}
@@ -1713,7 +1713,7 @@ int linux_get_dict_names(char *main_dict_name,char *user_dict_name, char *foreig
 						dict = dirname(p);
 						strcat(dict,"/");
 						if (parent)
-							strcat(dict,"../");
+							strcat(dict,"../share/dectalk/");
 						strcat(dict,foreign_dict_name);
 						strcpy(foreign_dict_name,dict);
 					}
@@ -1749,7 +1749,7 @@ int linux_get_dict_names(char *main_dict_name,char *user_dict_name, char *foreig
 				dict = dirname(p);
 				strcat(dict,"/");
 				if (parent)
-					strcat(dict,"../");
+					strcat(dict,"../share/dectalk/");
 				strcat(dict,DEF_LINUX_FOREIGN_DICT);
 				strcpy(foreign_dict_name,dict);
 			}

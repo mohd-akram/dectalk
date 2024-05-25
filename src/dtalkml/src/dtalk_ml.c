@@ -619,7 +619,7 @@ BOOL init(void)
 		if (count != -1) {
 			char *cfg;
 			cfg = dirname(p);
-			strcat(cfg,"/../");
+			strcat(cfg,"/../etc/");
 			strcat(cfg,"DECtalk.conf");
 			config_file=fopen(cfg,"r");
 		}
@@ -1608,7 +1608,7 @@ DWORD TextToSpeechEnumLangs(LPLANG_ENUM *langs)
 		if (count != -1) {
 			char *cfg;
 			cfg = dirname(p);
-			strcat(cfg,"/../");
+			strcat(cfg,"/../etc/");
 			strcat(cfg,"DECtalk.conf");
 			config_file=fopen(cfg,"r");
 		}

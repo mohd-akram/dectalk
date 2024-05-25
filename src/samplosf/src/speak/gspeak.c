@@ -805,7 +805,7 @@ int main (int argc, char *argv[])
 	  if (count != -1) {
 		  char *cfg;
 		  cfg = dirname(p);
-		  strcat(cfg,"/../");
+		  strcat(cfg,"/../etc/");
 		  strcat(cfg,"DECtalk.conf");
 		  config_file=fopen(cfg,"r");
 	  }
@@ -860,7 +860,7 @@ int main (int argc, char *argv[])
 	     bmp = dirname(p);
 	     strcat(bmp,"/");
 	     if (parent)
-	             strcat(bmp,"../");
+	             strcat(bmp,"../share/dectalk/");
 	     strcat(bmp,bitmap_path);
 	     strcpy(bitmap_path,bmp);
 	   }
@@ -2024,7 +2024,7 @@ void HelpAboutCallback(GtkWidget *w, gpointer data)
 	  if (count != -1) {
 		  char *cfg;
 		  cfg = dirname(p);
-		  strcat(cfg,"/../");
+		  strcat(cfg,"/../etc/");
 		  strcat(cfg,"DECtalk.conf");
 		  config_file=fopen(cfg,"r");
 	  }
@@ -2078,7 +2078,7 @@ void HelpAboutCallback(GtkWidget *w, gpointer data)
 	     bmp = dirname(p);
 	     strcat(bmp,"/");
 	     if (parent)
-	             strcat(bmp,"../");
+	             strcat(bmp,"../share/dectalk/");
 	     strcat(bmp,bitmap_path);
 	     strcpy(bitmap_path,bmp);
 	   }
@@ -2159,7 +2159,7 @@ void HelpHelpCallback(GtkWidget *w, gpointer data)
     "\n"
     "GSpeak help\n\n"
     "  Point your web browser to:\n\n"
-    "  - file://" DECTALK_INSTALL_PREFIX "/doc/DECtalk/html/dectalk.htm\n\n"
+    "  - file://" DECTALK_INSTALL_PREFIX "/share/doc/dectalk/html/dectalk.htm\n\n"
     "  Or if you have xdg-open installed, click below.\n");
   gtk_box_pack_start(GTK_BOX(help_vbox), help_label, FALSE, FALSE, 0);
   gtk_label_set_justify(GTK_LABEL(help_label), GTK_JUSTIFY_LEFT);
@@ -2184,7 +2184,7 @@ void HelpHelpCallback(GtkWidget *w, gpointer data)
 
 void HelpOpenNetscape()
 {
-  system("xdg-open file://" DECTALK_INSTALL_PREFIX "/doc/DECtalk/html/dectalk.htm &");
+  system("xdg-open file://" DECTALK_INSTALL_PREFIX "/share/doc/dectalk/html/dectalk.htm &");
 }
 
 void NotAvailableCallback(GtkWidget *w, gpointer data)

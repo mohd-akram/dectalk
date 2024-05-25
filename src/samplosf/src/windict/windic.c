@@ -1122,14 +1122,14 @@ void HelpHelpCallback(GtkWidget *w, gpointer data)
   help_vbox = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER(help_window), help_vbox);
 
-  help_label = gtk_label_new("\nWindic help\n\n  Point your web browser to:\n\n   file:///usr/local/doc/DECtalk/html/DECtalk.html\n\n  Or if you use Netscape, click below.\n");
+  help_label = gtk_label_new("\nWindic help\n\n  Point your web browser to:\n\n   file://" DECTALK_INSTALL_PREFIX "/share/doc/dectalk/html/dectalk.htm\n\n  Or if you have xdg-open installed, click below.\n");
   gtk_box_pack_start(GTK_BOX(help_vbox), help_label, FALSE, FALSE, 0);
   gtk_label_set_justify(GTK_LABEL(help_label), GTK_JUSTIFY_LEFT);
 
   help_button_box = gtk_vbutton_box_new();
   gtk_box_pack_end(GTK_BOX(help_vbox), help_button_box, FALSE, FALSE, 20);
  
-  help_button = gtk_button_new_with_label("Netscape users click here.");
+  help_button = gtk_button_new_with_label("Open in web browser");
   gtk_signal_connect_object(GTK_OBJECT(help_button), "clicked",
 			    GTK_SIGNAL_FUNC(HelpOpenNetscape), 
 			    GTK_OBJECT(help_window) );
@@ -1156,7 +1156,7 @@ void HelpHelpCallback(GtkWidget *w, gpointer data)
 ********************************************************************************/
 void HelpOpenNetscape()
 {
-  system("netscape file:///usr/local/doc/DECtalk/html/DECtalk.html &");
+  system("xdg-open file://" DECTALK_INSTALL_PREFIX "/share/doc/dectalk/html/dectalk.htm &");
 }
 
 /*******************************************************************************
@@ -1255,7 +1255,7 @@ void HelpAboutCallback(GtkWidget *w, gpointer data)
 	  if (count != -1) {
 		  char *cfg;
 		  cfg = dirname(p);
-		  strcat(cfg,"/../");
+		  strcat(cfg,"/../etc/");
 		  strcat(cfg,"DECtalk.conf");
 		  config_file=fopen(cfg,"r");
 	  }
@@ -1310,7 +1310,7 @@ void HelpAboutCallback(GtkWidget *w, gpointer data)
 	     bmp = dirname(p);
 	     strcat(bmp,"/");
 	     if (parent)
-	             strcat(bmp,"../");
+	             strcat(bmp,"../share/dectalk/");
 	     strcat(bmp,bitmap_path);
 	     strcpy(bitmap_path,bmp);
 	   }
