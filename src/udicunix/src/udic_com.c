@@ -155,7 +155,7 @@ unsigned int arpabet_lang_fonts[] = {
 int look_for_prefix(char p1, char p2);
 
 
-main(int argc,char *argv[])
+int main(int argc,char *argv[])
 
 {
 #if defined __linux__ || defined __osf__ || defined __ppc__ || defined (__APPLE__)

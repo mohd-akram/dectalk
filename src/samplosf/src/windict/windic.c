@@ -94,6 +94,7 @@ void Error(char*, int);
 void CheckFileExtension(int, char *);
 void SaveMsg(void);
 char *strip_filename(gchar *);
+void compile_dictonary(char *, char *, char *);
 
 
 

@@ -71,7 +71,7 @@ GSPEAK_ALL_OBJS= $(GSPEAK_OBJS) $(GSPEAK_DEMO_OBJS)
 #all: $(OUTPUT_DIR_2)/speak $(OUTPUT_DIR_2)/speak.uid
 all: $(SPEAK_ALL)
 
-$(OUTPUT_DIR_2)/gspeak:$(GSPEAK_OBJS) ../../../dtalkml/build/$(OS_VERSION)/$(LANG_CODE)/$(ML_OUT)/libtts.so 
+$(OUTPUT_DIR_2)/gspeak:$(GSPEAK_OBJS) ../../../dtalkml/build/$(OS_VERSION)/$(LANG_CODE)/$(ML_OUT)/$(ML_SONAME)
 	$(RM) $@
 	$(CC) -o $@ $(GSPEAK_OBJS) $(GLINK_FLAGS) $(G_DT_LIB) $(GLIBS)
 
@@ -89,7 +89,7 @@ $(OUTPUT_DIR_2)/link/gspeak.o:gspeak.c
 $(OUTPUT_DIR_2)/link/gspeakdem_$(LANG_CODE).o:gspeak.c
 	$(CC) -c -DDEMO -D$(LANGUAGE) $(GCFLAGS) -o $@ $<
 
-$(OUTPUT_DIR_2)/speak:$(SPEAK_OBJS) ../../../dtalkml/build/$(OS_VERSION)/$(LANG_CODE)/$(ML_OUT)/libtts.so
+$(OUTPUT_DIR_2)/speak:$(SPEAK_OBJS) ../../../dtalkml/build/$(OS_VERSION)/$(LANG_CODE)/$(ML_OUT)/$(ML_SONAME)
 	$(RM) $@
 	$(CC) -o $@ $(SPEAK_OBJS) $(LINKFLAGS) $(XLIBS) $(DT_LIB) $(LIBS) $(MMELIBS)
 

@@ -210,7 +210,7 @@ static void usage()
 **     None
 **
 **************************************************************************/
-main( int argc, char *argv[] )
+int main( int argc, char *argv[] )
 {
     int devNo		= (int)WAVE_MAPPER;
     int speaker_id 	= -1;

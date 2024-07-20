@@ -48,7 +48,7 @@
 #define MAXBUCH 50	
 #define UMLMRK 	16
 
-extern ls_rule_show_phone(PHONE *, PHONE *, char *); // NAL warning removal
+extern int ls_rule_show_phone(PHONE *, PHONE *, char *); // NAL warning removal
 extern int ls_adju_is_cons(PHONE *); 				 // NAL warning removal
 
 
