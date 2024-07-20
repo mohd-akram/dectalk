@@ -1,9 +1,13 @@
 */build/
 *~
-autom4te.cache/
+aclocal.m4
+autom4te.cache/*
+configure
 config.log
-config.status
+config.guess
 config.h
+config.status
+config.sub
 dapi/src/api/Makefile
 dapi/src/cmd/Makefile
 dapi/src/cmd/par_*.bin

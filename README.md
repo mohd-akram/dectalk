@@ -117,6 +117,7 @@ Or you may trigger an install by typing any of the following from the terminal:
 #### Compilation
 ```
 cd src/
+autoreconf -si
 ./configure
 make -j
 ```
