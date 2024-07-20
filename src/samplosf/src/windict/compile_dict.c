@@ -105,7 +105,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include <time.h>
-#include <malloc.h>
+#include <string.h>
 #include "port.h"
 #include "cmd.h"
 
@@ -263,6 +263,15 @@ void pushEntry();
 unsigned char nonWhite();
 unsigned char getAlpha();
 int look_for_prefix(char, char);
+int get_entry(char*);
+int parseString(char*);
+void scan_entry();
+void sort_entry();
+void scan_error(char*);
+int legal_alpha(char);
+int validatePrefixStr(char*);
+int validatePostfixStr(char*);
+int skipBlanks(char*);
 
 
 /*
@@ -305,7 +314,7 @@ unsigned char case_upper[] = {
 	0xf8,		0xf9,		0xfa,		0xfb,		0xfc,		0xfd,		0xfe,		0xff,
 };
 
-compile_dictonary(char *DictFile, char *text, char *errStr)
+void compile_dictonary(char *DictFile, char *text, char *errStr)
 {
 
 	char	 fnam_d[80];
@@ -393,7 +402,7 @@ compile_dictonary(char *DictFile, char *text, char *errStr)
  */
 
 
-sort_entry()
+void sort_entry()
 {
 	unsigned char *ct,*dt;
 	unsigned int *blink,next;
@@ -438,7 +447,7 @@ sort_entry()
  *  <entry> {1 char phonemes}
  */
 
-scan_entry()
+void scan_entry()
 {
 	unsigned char c;
 
@@ -691,7 +700,7 @@ int lookupArpabet(p1,p2)
  *  of the user dictionary ...
  */
 
-scan_error(es)
+void scan_error(es)
 char *es;
 {
 	int	i;
@@ -725,11 +734,11 @@ unsigned char getAlpha()
 	if(line[curr_char] == ' ' || line[curr_char] == '\t')
 		return(' ');
 	scan_error("Unknown alphabetic character");
-        return;
+        return('\0');
 }
 
 unsigned char legal_graphs[] = "_-()&@*!\\/";
-legal_alpha(c)
+int legal_alpha(c)
 char c;
 {
 	int	i;
@@ -832,7 +841,9 @@ int validatePrefixStr( char * prefixStr )
            (prefixStr[idx] != ' ') && 
            (prefixStr[idx] != 0) )
       {
-         scan_error("Not alpha numeric 0x%x\n", prefixStr[idx]);
+         char err[32];
+         sprintf(err, "Not alpha numeric 0x%x\n", prefixStr[idx]);
+         scan_error(err);
          validStr = FALSE; 
          break;
       }
