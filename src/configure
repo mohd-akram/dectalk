@@ -4075,7 +4075,7 @@ case "$target" in
 	sparc-sun-*) DAPI_LD_SHARED="\$(LD) -G -Bsymbolic \
 		-o \$@ \$(DECTALK_TTS_OBJS) \$(LIBS)" ;;
 	*-apple-darwin*) DAPI_LD_SHARED="\$(CC) -dynamic -dynamiclib -dylib \
-		-o \$@ \$(DECTALK_TTS_OBJS) \$(LIBS) -Wl,-install_name,libtts_\$(LANG_CODE).so ${UNIVERSAL_BINARY}" ;;
+		-o \$@ \$(DECTALK_TTS_OBJS) \$(LIBS) -Wl,-rpath,@loader_path/../lib/ -Wl,-install_name,@rpath/libtts_\$(LANG_CODE).so ${UNIVERSAL_BINARY}" ;;
 esac
 
 ML_ALL="../build/\$(OS_VERSION)/\$(LANG_CODE)/\$(ML_OUT)/libtts.a ../build/\$(OS_VERSION)/\$(LANG_CODE)/\$(ML_OUT)/libtts.so"
@@ -4109,7 +4109,7 @@ case "$target" in
 	-o \$@ ../build/\$(OS_VERSION)/\$(LANG_CODE)/\$(ML_OUT)/link/dtalk_ml.o \
 	../build/\$(OS_VERSION)/\$(LANG_CODE)/\$(ML_OUT)/link/init.o \
 	../build/\$(OS_VERSION)/\$(LANG_CODE)/\$(ML_OUT)/libtts.a  -ldl -lpthread -lc \
-	-Wl,-rpath -Wl,@loader_path/ -Wl,-rpath -Wl,@loader_path/../lib/ -Wl,-install_name,@rpath/libtts.dylib ${UNIVERSAL_BINARY}" ;;
+	-Wl,-rpath,@loader_path/ -Wl,-rpath,@loader_path/../lib/ -Wl,-install_name,@rpath/libtts.dylib ${UNIVERSAL_BINARY}" ;;
 	sparc-sun-*) ML_TTS_SO="\$(LD) -G -Bsymbolic \
 	-o \$@ ../build/\$(OS_VERSION)/\$(LANG_CODE)/\$(ML_OUT)/link/dtalk_ml.o \
 	../build/\$(OS_VERSION)/\$(LANG_CODE)/\$(ML_OUT)/link/init.o \
