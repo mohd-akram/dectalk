@@ -1,9 +1,9 @@
 /************************************************************
  *
- *                           Copyright ©
- *	  Copyright © 2002 Fonix Corporation. All rights reserved.
- *	  Copyright © 2000, 2001 Force Computers, Inc., a Solectron Company. All rights reserved.
- *    © Digital Equipment Corporation 1996, 1997, 1998. All rights reserved.
+ *                           Copyright Â©
+ *	  Copyright Â© 2002 Fonix Corporation. All rights reserved.
+ *	  Copyright Â© 2000, 2001 Force Computers, Inc., a Solectron Company. All rights reserved.
+ *    Â© Digital Equipment Corporation 1996, 1997, 1998. All rights reserved.
  *
  *    Restricted Rights: Use, duplication, or disclosure by the U.S.
  *    Government is subject to restrictions as set forth in subparagraph
@@ -348,63 +348,71 @@ int cm_cmd_play(LPTTS_HANDLE_T phTTS)
 	/*  wave_file_open() function. It is freed at the end of          */
 	/*  the cmd_wav() function (this function).                       */
 	/******************************************************************/
-
-	tmp = strrchr(pCmd_t->pString[0],'.');
-	if (tmp && _stricmp(tmp,".au")==0)
+	if(pCmd_t->pString[0] != NULL)
 	{
-		is_au=1;
-		/* open the file */
-		if ((au_fd=open(pCmd_t->pString[0],O_RDONLY))==-1)
+		tmp = strrchr(pCmd_t->pString[0],'.');
+		if (tmp && _stricmp(tmp,".au")==0)
 		{
-	  		free( pOldWaveFormat );
-	  		free( pWaveFormat );
-		  	free( lpData );
-			TextToSpeechErrorHandler( phTTS,
-				 ERROR_OPENING_WAVE_FILE,
-				 MMSYSERR_ERROR );
-			return CMD_unable_to_open_file;
+			is_au=1;
+			/* open the file */
+			if ((au_fd=open(pCmd_t->pString[0],O_RDONLY))==-1)
+			{
+		  		free( pOldWaveFormat );
+		  		free( pWaveFormat );
+			  	free( lpData );
+				TextToSpeechErrorHandler( phTTS,
+					 ERROR_OPENING_WAVE_FILE,
+					 MMSYSERR_ERROR );
+				return CMD_unable_to_open_file;
+			}
+			if (read(au_fd,&AuFileHdr,sizeof(AuFileHdr)-4)<sizeof(AuFileHdr)-4)
+			{
+				TextToSpeechErrorHandler( phTTS,
+					  ERROR_BAD_WAVE_FILE_FORMAT,
+					  MMSYSERR_ERROR );
+				return CMD_bad_wave_file_format;
+			}
+			if (strcmp(AuFileHdr.magic,".snd"))
+			{
+				TextToSpeechErrorHandler( phTTS,
+					  ERROR_BAD_WAVE_FILE_FORMAT,
+					  MMSYSERR_ERROR );
+				return CMD_bad_wave_file_format;
+			}
+			AuFileHdr.hdr_size=SWAP_32_BIG(AuFileHdr.hdr_size);
+			AuFileHdr.data_size=SWAP_32_BIG(AuFileHdr.data_size);
+			AuFileHdr.encoding=SWAP_32_BIG(AuFileHdr.encoding);
+			AuFileHdr.sample_rate=SWAP_32_BIG(AuFileHdr.sample_rate);
+			AuFileHdr.channels=SWAP_32_BIG(AuFileHdr.channels);
+			if (lseek(au_fd,AuFileHdr.hdr_size,SEEK_SET)<0)
+			{
+				TextToSpeechErrorHandler( phTTS,
+					  ERROR_BAD_WAVE_FILE_FORMAT,
+					  MMSYSERR_ERROR );
+				return CMD_bad_wave_file_format;
+			}
 		}
-		if (read(au_fd,&AuFileHdr,sizeof(AuFileHdr)-4)<sizeof(AuFileHdr)-4)
+		else
 		{
-			TextToSpeechErrorHandler( phTTS,
-				  ERROR_BAD_WAVE_FILE_FORMAT,
-				  MMSYSERR_ERROR );
-			return CMD_bad_wave_file_format;
-		}
-		if (strcmp(AuFileHdr.magic,".snd"))
-		{
-			TextToSpeechErrorHandler( phTTS,
-				  ERROR_BAD_WAVE_FILE_FORMAT,
-				  MMSYSERR_ERROR );
-			return CMD_bad_wave_file_format;
-		}
-		AuFileHdr.hdr_size=SWAP_32_BIG(AuFileHdr.hdr_size);
-		AuFileHdr.data_size=SWAP_32_BIG(AuFileHdr.data_size);
-		AuFileHdr.encoding=SWAP_32_BIG(AuFileHdr.encoding);
-		AuFileHdr.sample_rate=SWAP_32_BIG(AuFileHdr.sample_rate);
-		AuFileHdr.channels=SWAP_32_BIG(AuFileHdr.channels);
-		if (lseek(au_fd,AuFileHdr.hdr_size,SEEK_SET)<0)
-		{
-			TextToSpeechErrorHandler( phTTS,
-				  ERROR_BAD_WAVE_FILE_FORMAT,
-				  MMSYSERR_ERROR );
-			return CMD_bad_wave_file_format;
-		}
-	}
-	else
-	{
-		
-	hMmio = wave_file_open( pCmd_t->pString[0], &pWaveFormat, &iError, phTTS );
-
+			
+		hMmio = wave_file_open( pCmd_t->pString[0], &pWaveFormat, &iError, phTTS );
+	
 #ifndef ERRORCHECK
-	if ( hMmio == (long)NULL )
-	{
-	  free( pOldWaveFormat );
-	  free( pWaveFormat );
-		  free( lpData );
-	  return( iError );
-	}
+		if ( hMmio == (long)NULL )
+		{
+		  free( pOldWaveFormat );
+		  free( pWaveFormat );
+			  free( lpData );
+		  return( iError );
+		}
 #endif
+		}
+	}else
+	{
+		free( pOldWaveFormat );
+		free( pWaveFormat );
+		free( lpData );
+		return( ERROR_OPENING_WAVE_FILE );
 	}
 
 	/******************************************************************/
